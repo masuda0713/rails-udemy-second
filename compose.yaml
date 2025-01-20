@@ -14,7 +14,11 @@ services:
       retries: 3
 
   web:
-    build: .
+    build:
+      context: .
+      args:
+        UID: "${UID}"  # ホストのUIDを渡す
+        GID: "${GID}"  # ホストのGIDを渡す
     depends_on:
       db:
         condition: service_healthy
@@ -23,7 +27,7 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - .:/samplerails
+      - .:/samplerails:cached  # パフォーマンス向上のために `:cached` を追加
     command: bash -c "rm -f /samplerails/tmp/pids/server.pid && bundle exec rails server -b 0.0.0.0"
 
 volumes:
