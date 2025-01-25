@@ -1,7 +1,12 @@
 FROM ruby:3.2.2
-RUN apt-get update -qq
-RUN curl -fsSL https://deb.nodesource.com/setup_lts.x | bash - && apt-get install -y nodejs
-RUN npm install --global yarn
+
+# 必要なパッケージをインストール
+RUN apt-get update -qq && apt-get install -y \
+  default-mysql-client \
+  curl \
+  nodejs \
+  npm && \
+  npm install --global yarn
 
 # rubygemsのアップデートを追加
 RUN gem update --system

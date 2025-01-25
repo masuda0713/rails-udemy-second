@@ -7,11 +7,11 @@ services:
       - db-data:/var/lib/mysql
     ports:
       - "3306:3306"
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "--silent"]
-      interval: 10s
-      timeout: 5s
-      retries: 3
+    # healthcheck: # コメントアウト
+    #   test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "--silent"]
+    #   interval: 10s
+    #   timeout: 5s
+    #   retries: 3
 
   web:
     build:
@@ -20,14 +20,13 @@ services:
         UID: "${UID}"  # ホストのUIDを渡す
         GID: "${GID}"  # ホストのGIDを渡す
     depends_on:
-      db:
-        condition: service_healthy
+      - db
     environment:
       DATABASE_PASSWORD: password
     ports:
       - "3000:3000"
     volumes:
-      - .:/samplerails:cached  # パフォーマンス向上のために `:cached` を追加
+      - .:/samplerails:cached
     command: bash -c "rm -f /samplerails/tmp/pids/server.pid && bundle exec rails server -b 0.0.0.0"
 
 volumes:

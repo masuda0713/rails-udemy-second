@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
-  # get 'users/index'
   get 'users', to: 'users#index'
-  resources :questions
+  root "questions#index" # ルートURLを設定
+  resources :questions do # questionsに紐づくanswersをネスト。answersのルーティングを設定
+    resources :answers
+  end
 end
